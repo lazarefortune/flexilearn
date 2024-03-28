@@ -1,24 +1,28 @@
 import prisma from "../db/prisma.js";
 import AppError from "../utils/AppError.js";
 
-export const createCourse = async (req, res) => {
-    const { title, content } = req.body;
-    const { user: { id: authorId } } = req.session
+export const createCourse = async (req, res, next) => {
+    try {
+        const { title, content } = req.body;
+        const { user: { id: authorId } } = req.session
 
-    const course = await prisma.course.create({
-        data: {
-            title,
-            content,
-            authorId,
-        },
-    });
+        const course = await prisma.course.create({
+            data: {
+                title,
+                content,
+                authorId,
+            },
+        });
 
-    res.status(201).json({
-        status: "success",
-        data: {
-            course,
-        },
-    });
+        res.status(201).json({
+            status: "success",
+            data: {
+                course,
+            },
+        });
+    } catch (error) {
+        next(error)
+    }
 }
 
 export const getCourse = async (req, res) => {

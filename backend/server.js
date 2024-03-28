@@ -1,7 +1,10 @@
+import pino from "pino";
 import dotenv from "dotenv";
 import app from "./app.js";
 import { PrismaClient } from "@prisma/client"
+import logger from "./utils/logger.js";
 dotenv.config();
+
 
 const PORT = process.env.APP_PORT || 4000;
 
@@ -10,11 +13,10 @@ const prisma = new PrismaClient()
 //check if database is connected
 prisma.$connect()
     .then(() => {
-        console.log("🚀 Database connected")
+        logger.info("🚀 Database connected")
     })
     .catch((err) => {
-        console.log("🧨 Database connection failed")
-        console.log(err)
+        logger.error("🧨 Database connection failed")
     })
 
 app.get("/api", (req, res) => {
@@ -25,5 +27,6 @@ app.get("/api", (req, res) => {
 })
 
 app.listen(PORT, () => {
-    console.log(`✅  Server running on port ${PORT}`);
+    // console.log(`✅  Server running on port ${PORT}`);
+    logger.info(`✅  Server running on port ${PORT}`);
 })

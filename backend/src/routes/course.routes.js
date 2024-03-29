@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get("/", auth, courseController.getAllCourses);
 router.get("/:id", auth, courseController.getCourse);
-router.post("/create", auth, validate(courseSchema), courseController.createCourse);
+router.post("/", auth, validate(courseSchema), courseController.createCourse);
 router.put("/:id", auth, validate(courseSchema), courseController.updateCourse);
 router.delete("/:id", auth, courseController.deleteCourse);
 

@@ -1,6 +1,6 @@
 # Backend de l'application
 
-## NodeJS - Express - Prisma - JWT
+## NodeJS - Express - Objection - JWT
 
 ### Description
 

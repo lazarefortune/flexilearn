@@ -1,8 +1,9 @@
 import jsonwebtoken from "jsonwebtoken";
 import configuration from "../config/configuration.js"
-import prisma from "../db/prisma.js";
+import User from "../database/models/user.model.js";
+import AppError from "../utils/AppError.js";
 
-export let signInUser = async (req, res) => {
+export const signInUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -15,11 +16,7 @@ export let signInUser = async (req, res) => {
         }
 
         // check if user exists
-        const user = await prisma.user.findUnique({
-            where: {
-                email,
-            },
-        });
+        const user = await User.query().where('email', email).first();
 
         if (!user) {
             return res.status(400).json({
@@ -77,11 +74,7 @@ export const createUser = async (req, res) => {
         }
 
         // check if user already exists
-        const userExists = await prisma.user.findUnique({
-            where: {
-                email,
-            },
-        });
+        const userExists = await User.query().where('email', email).first();
 
         if (userExists) {
             return res.status(400).json({
@@ -91,14 +84,10 @@ export const createUser = async (req, res) => {
         }
 
         // create user
-        const user = await prisma.user.create({
-            data: {
-                name,
-                email,
-                password,
-                courses: {
-                }
-            },
+        const user = await User.query().insert({
+            name,
+            email,
+            password,
         });
 
         res.status(201).json({
@@ -110,5 +99,34 @@ export const createUser = async (req, res) => {
             status: "fail",
             message: error.message,
         });
+    }
+}
+
+export const updateUser = async (req, res, next) => {
+    try {
+        const { name, email, password, preference } = req.body;
+        const { user: { id: currentUserId } } = req.session;
+
+        const userExists = await User.query().findById(currentUserId);
+
+        if (!userExists) {
+            throw new AppError(404, "fail", "User not found")
+        }
+
+        await User.query().findById(currentUserId).patch({
+            name,
+            email,
+            password,
+            preference
+        });
+
+        const user = await User.query().findById(currentUserId);
+
+        res.status(200).json({
+            status: "success",
+            data: user,
+        });
+    } catch (error) {
+        next(error)
     }
 }

@@ -82,3 +82,11 @@ body{
 .btn {
   @apply px-6 py-2 text-base rounded-md active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring focus:ring-opacity-50 transition-colors;
 }
+
+.courses-list {
+  @apply grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.course {
+  @apply bg-card text-card-foreground rounded-lg shadow-md;
+}

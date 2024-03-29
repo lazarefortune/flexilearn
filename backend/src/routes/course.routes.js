@@ -6,7 +6,7 @@ import {courseSchema} from "../domain/courses/validator/course.validator.js";
 
 const router = express.Router();
 
-router.get("/", auth, courseController.getAllCourses);
+router.get("/", courseController.getAllCourses);
 router.get("/:id", auth, courseController.getCourse);
 router.post("/", auth, validate(courseSchema), courseController.createCourse);
 router.put("/:id", auth, validate(courseSchema), courseController.updateCourse);

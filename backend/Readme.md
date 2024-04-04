@@ -10,7 +10,7 @@ This is a simple project to demonstrate the use of NodeJS with Express for authe
 
 - NodeJS
 - Express
-- Prisma
+- Objection
 
 ### How to run
 
